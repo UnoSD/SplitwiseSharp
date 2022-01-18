@@ -92,23 +92,17 @@ type Group =
       ///A link the user can send to a friend to join the group directly
       invite_link: Option<string> }
 
-type Errors =
-    { ``base``: Option<list<string>> }
-
-type unauthorized =
+type Unauthorized =
     { error: Option<string> }
 
-type forbiddenErrors =
-    { ``base``: Option<list<string>> }
+type Errors =
+    { errors: {| ``base``: Option<list<string>> |} }
 
-type forbidden =
-    { errors: forbiddenErrors }
+type Forbidden =
+    Errors
 
-type notFoundErrors =
-    { ``base``: Option<list<string>> }
-
-type notFound =
-    { errors: notFoundErrors }
+type NotFound =
+    Errors
 
 type Balance =
     { currency_code: Option<string>
@@ -144,14 +138,11 @@ type RepeatInterval =
         | Monthly -> "monthly"
         | Yearly -> "yearly"
 
-type CommentUserPicture =
-    { medium: Option<string> }
-
 type CommentUser =
     { id: Option<int>
       first_name: Option<string>
       last_name: Option<string>
-      picture: Option<CommentUserPicture> }
+      picture: Option<{| medium: Option<string> |}> }
 
 type Share =
     { user: Option<CommentUser>
@@ -205,11 +196,6 @@ type Repayments =
       ``to``: Option<int>
       amount: Option<string> }
 
-type ExpenseCategory =
-    { id: Option<int>
-      ///Translated to the current user's locale
-      name: Option<string> }
-
 type Receipt =
     { large: Option<string>
       original: Option<string> }
@@ -259,7 +245,9 @@ type Expense =
       ///If the expense was deleted, when it was deleted.
       deleted_at: Option<DateTimeOffset>
       deleted_by: Option<User>
-      category: Option<ExpenseCategory>
+      category: Option<{| id: Option<int>
+                          ///Translated to the current user's locale
+                          name: Option<string> |}>
       receipt: Option<Receipt>
       users: Option<list<Share>>
       comments: Option<list<Comment>> }
@@ -379,325 +367,279 @@ type GetGetCurrentUser =
     ///OK
     | OK of payload: {| user: CurrentUser |}
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
+
+type UserPayload =
+    { user : User }
 
 [<RequireQualifiedAccess>]
 type GetGetUserById =
     ///OK
-    | OK of payload: {| user : User |}
+    | OK of payload: UserPayload
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
+    | Forbidden of payload: Forbidden
     ///Not Found
-    | NotFound of payload: notFound
+    | NotFound of payload: NotFound
 
 [<RequireQualifiedAccess>]
 type PostUpdateUserById =
     ///OK
-    | OK of payload: {| user : User |}
+    | OK of payload: UserPayload
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
+    | Forbidden of payload: Forbidden
 
 [<RequireQualifiedAccess>]
 type GetGetGroups =
     ///OK
     | OK of payload: {| groups: Option<list<Group>> |}
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
+
+type GroupPayload =
+    { group: Option<Group> }
 
 [<RequireQualifiedAccess>]
 type GetGetGroupById =
     ///OK
-    | OK of payload: {| group: Option<Group> |}
+    | OK of payload: GroupPayload
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
+    | Forbidden of payload: Forbidden
     ///Not Found
-    | NotFound of payload: notFound
-
-type PostCreateGroup_BadRequest =
-    { errors: Option<{| ``base``: Option<list<string>> |}> }
+    | NotFound of payload: NotFound
 
 [<RequireQualifiedAccess>]
 type PostCreateGroup =
     ///OK
-    | OK of payload: {| group: Option<Group> |}
+    | OK of payload: GroupPayload
     ///Bad Request
-    | BadRequest of payload: PostCreateGroup_BadRequest
+    | BadRequest of payload: {| errors: Option<{| ``base``: Option<list<string>> |}> |}
 
-type PostDeleteGroupById_OK = { success: Option<bool> }
+type SuccessPayload =
+    { success: Option<bool> }
 
 [<RequireQualifiedAccess>]
 type PostDeleteGroupById =
     ///OK
-    | OK of payload: PostDeleteGroupById_OK
+    | OK of payload: SuccessPayload
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
+    | Forbidden of payload: Forbidden
     ///Not Found
-    | NotFound of payload: notFound
-
-type PostUndeleteGroupById_OK =
-    { success: Option<bool>
-      errors: Option<list<string>> }
+    | NotFound of payload: NotFound
 
 [<RequireQualifiedAccess>]
 type PostUndeleteGroupById =
     ///OK
-    | OK of payload: PostUndeleteGroupById_OK
+    | OK of payload: {| success: Option<bool>
+                        errors: Option<list<string>> |}
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
-
-type PostAddUserToGroup_OK =
-    { success: Option<bool>
-      user: Option<{| user : User |}>
-      errors: Option<Map<string, list<string>>> }
+    | Forbidden of payload: Forbidden
 
 [<RequireQualifiedAccess>]
 type PostAddUserToGroup =
-    ///OK
-    | OK of payload: PostAddUserToGroup_OK
+    | OK of payload: {| success: Option<bool>
+                        user: Option<UserPayload>
+                        errors: Option<Map<string, list<string>>> |}
 
 type PostRemoveUserFromGroupPayload =
     { group_id: int
       user_id: int }
 
-type PostRemoveUserFromGroup_OK =
-    { success: Option<bool>
-      errors: Option<Map<string, list<string>>> }
-
 [<RequireQualifiedAccess>]
 type PostRemoveUserFromGroup =
-    ///OK
-    | OK of payload: PostRemoveUserFromGroup_OK
-
-type GetGetFriends_OK = { friends: Option<list<string>> }
+    | OK of payload: {| success: Option<bool>
+                        errors: Option<Map<string, list<string>>> |}
 
 [<RequireQualifiedAccess>]
 type GetGetFriends =
     ///OK
-    | OK of payload: GetGetFriends_OK
+    | OK of payload: {| friends: Option<list<string>> |}
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
 
-type GetGetFriendById_OK = { friend: Option<Friend> }
+type FriendPayload =
+    { friend: Option<Friend> }
 
 [<RequireQualifiedAccess>]
 type GetGetFriendById =
     ///OK
-    | OK of payload: GetGetFriendById_OK
+    | OK of payload: FriendPayload
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
+    | Forbidden of payload: Forbidden
     ///Not Found
-    | NotFound of payload: notFound
+    | NotFound of payload: NotFound
 
 type PostCreateFriendPayload =
     { email: string
       user_first_name: Option<string>
       user_last_name: Option<string> }
 
-type PostCreateFriend_OK = { friend: Option<Friend> }
-
 [<RequireQualifiedAccess>]
 type PostCreateFriend =
     ///OK
-    | OK of payload: PostCreateFriend_OK
+    | OK of payload: FriendPayload
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
-
-type PostCreateFriends_OK =
-    { users: Option<list<string>>
-      errors: Option<list<string>> }
-
-type PostCreateFriends_BadRequest =
-    { users: Option<list<string>>
-      errors: Option<Map<string, list<string>>> }
+    | Unauthorized of payload: Unauthorized
 
 [<RequireQualifiedAccess>]
 type PostCreateFriends =
     ///OK
-    | OK of payload: PostCreateFriends_OK
+    | OK of payload: {| users: Option<list<string>>
+                        errors: Option<list<string>> |}
     ///Bad Request
-    | BadRequest of payload: PostCreateFriends_BadRequest
+    | BadRequest of payload: {| users: Option<list<string>>
+                                errors: Option<Map<string, list<string>>> |}
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
-
-type PostDeleteFriendById_OK =
-    { success: Option<bool>
-      errors: Option<Map<string, list<string>>> }
+    | Unauthorized of payload: Unauthorized
 
 [<RequireQualifiedAccess>]
 type PostDeleteFriendById =
     ///OK
-    | OK of payload: PostDeleteFriendById_OK
+    | OK of payload: {| success: Option<bool>
+                        errors: Option<Map<string, list<string>>> |}
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
+    | Forbidden of payload: Forbidden
     ///Not Found
-    | NotFound of payload: notFound
+    | NotFound of payload: NotFound
 
 type Currencies =
     { currency_code: Option<string>
       unit: Option<string> }
 
-type GetGetCurrencies_OK =
-    { currencies: Option<list<Currencies>> }
-
 [<RequireQualifiedAccess>]
 type GetGetCurrencies =
     ///OK
-    | OK of payload: GetGetCurrencies_OK
-
-type GetGetExpenseById_OK = { expense: Option<Expense> }
+    | OK of payload: {| currencies: Option<list<Currencies>> |}
 
 [<RequireQualifiedAccess>]
 type GetGetExpenseById =
     ///OK
-    | OK of payload: GetGetExpenseById_OK
+    | OK of payload: {| expense: Option<Expense> |}
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
+    | Forbidden of payload: Forbidden
     ///Not Found
-    | NotFound of payload: notFound
+    | NotFound of payload: NotFound
 
-type GetGetExpenses_OK = { expenses: Option<list<Expense>> }
+type ExpensesPayload =
+    { expenses: Option<list<Expense>> }
 
 [<RequireQualifiedAccess>]
 type GetGetExpenses =
     ///OK
-    | OK of payload: GetGetExpenses_OK
+    | OK of payload: ExpensesPayload
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
+    | Forbidden of payload: Forbidden
     ///Not Found
-    | NotFound of payload: notFound
-
-type PostCreateExpense_OK =
-    { expenses: list<Expense>
-      errors: Errors }
+    | NotFound of payload: NotFound
 
 [<RequireQualifiedAccess>]
 type PostCreateExpense =
     ///OK
-    | OK of payload: PostCreateExpense_OK
+    | OK of payload: {| expenses: list<Expense>
+                        errors: {| ``base``: Option<list<string>> |} |}
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
-
-type PostUpdateExpenseById_OK =
-    { expenses: Option<list<Expense>> }
+    | Forbidden of payload: Forbidden
 
 [<RequireQualifiedAccess>]
 type PostUpdateExpenseById =
     ///OK
-    | OK of payload: PostUpdateExpenseById_OK
+    | OK of payload: ExpensesPayload
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
-
-type PostDeleteExpenseById_OK =
-    { success: Option<bool> }
+    | Forbidden of payload: Forbidden
 
 [<RequireQualifiedAccess>]
 type PostDeleteExpenseById =
-    | OK of payload: PostDeleteExpenseById_OK
+    | OK of payload: SuccessPayload
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
-
-type PostUndeleteExpenseById_OK = { success: Option<bool> }
+    | Forbidden of payload: Forbidden
 
 [<RequireQualifiedAccess>]
 type PostUndeleteExpenseById =
-    | OK of payload: PostUndeleteExpenseById_OK
+    | OK of payload: SuccessPayload
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
-
-type GetGetComments_OK = { comments: Option<list<Comment>> }
+    | Forbidden of payload: Forbidden
 
 [<RequireQualifiedAccess>]
 type GetGetComments =
     ///OK
-    | OK of payload: GetGetComments_OK
+    | OK of payload: {| comments: Option<list<Comment>> |}
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
+    | Forbidden of payload: Forbidden
     ///Not Found
-    | NotFound of payload: notFound
+    | NotFound of payload: NotFound
 
 type PostCreateCommentPayload =
     { expense_id: Option<int>
       content: Option<string> }
 
-type PostCreateComment_OK = { comment: Option<string> }
+type CommentPayload =
+    { comment: Option<string> }
 
 [<RequireQualifiedAccess>]
 type PostCreateComment =
     ///OK
-    | OK of payload: PostCreateComment_OK
+    | OK of payload: CommentPayload
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
+    | Forbidden of payload: Forbidden
     ///Not Found
-    | NotFound of payload: notFound
-
-type PostDeleteComment_OK = { comment: Option<string> }
+    | NotFound of payload: NotFound
 
 [<RequireQualifiedAccess>]
 type PostDeleteComment =
     ///OK
-    | OK of payload: PostDeleteComment_OK
+    | OK of payload: CommentPayload
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
+    | Unauthorized of payload: Unauthorized
     ///Forbidden
-    | Forbidden of payload: forbidden
+    | Forbidden of payload: Forbidden
     ///Not Found
-    | NotFound of payload: notFound
-
-type GetGetNotifications_OK =
-    { notifications: Option<list<Notification>> }
+    | NotFound of payload: NotFound
 
 [<RequireQualifiedAccess>]
 type GetGetNotifications =
     ///OK
-    | OK of payload: GetGetNotifications_OK
+    | OK of payload: {| notifications: Option<list<Notification>> |}
     ///Invalid API key or OAuth access token
-    | Unauthorized of payload: unauthorized
-
-type GetGetCategories_OK =
-    { categories: Option<list<ParentCategory>> }
+    | Unauthorized of payload: Unauthorized
 
 [<RequireQualifiedAccess>]
 type GetGetCategories =
     ///OK
-    | OK of payload: GetGetCategories_OK
-
-type PostParseSentence_OK =
-    { expense: Option<Expense>
-      valid: Option<bool>
-      confidence: Option<float>
-      error: Option<string> }
+    | OK of payload: {| categories: Option<list<ParentCategory>> |}
 
 [<RequireQualifiedAccess>]
 type PostParseSentence =
     ///OK
-    | OK of payload: PostParseSentence_OK
+    | OK of payload: {| expense: Option<Expense>
+                        valid: Option<bool>
+                        confidence: Option<float>
+                        error: Option<string> |}
