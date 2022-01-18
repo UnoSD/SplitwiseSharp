@@ -62,8 +62,6 @@ httpClient.DefaultRequestHeaders.Authorization <-
 let client =
     SplitwiseSharpClient(httpClient)
 
-match client.GetGetUserById(3871342) with
-| GetGetUserById.OK currentuser   -> currentuser |> printfn "%A"
-| GetGetUserById.Unauthorized err -> printfn $"Bad request: {err}"
-| GetGetUserById.Forbidden x      -> match x.errors.``base`` with Some x -> printfn $"Forbidden %A{x}" | _ -> ()
-| GetGetUserById.NotFound  x      -> match x.errors.``base`` with Some x -> printfn $"Not found %A{x}" | _ -> ()
+match client.GetGetCurrentUser() with
+| GetGetCurrentUser.OK currentuser   -> currentuser |> printfn "%A"
+| GetGetCurrentUser.Unauthorized err -> printfn $"Unauthorized: {err}"
