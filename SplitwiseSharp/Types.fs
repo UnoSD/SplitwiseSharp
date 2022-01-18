@@ -7,15 +7,9 @@ type Debt =
       ``to``: Option<int>
       amount: Option<string>
       currency_code: Option<string> }
-    ///Creates an instance of Debt with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Debt =
-        { from = None
-          ``to`` = None
-          amount = None
-          currency_code = None }
 
 [<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type Registrationstatus =
+type RegistrationStatus =
     | [<CompiledName "confirmed">] Confirmed
     | [<CompiledName "dummy">] Dummy
     | [<CompiledName "invited">] Invited
@@ -29,55 +23,26 @@ type Picture =
     { small: Option<string>
       medium: Option<string>
       large: Option<string> }
-    ///Creates an instance of Picture with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Picture =
-        { small = None
-          medium = None
-          large = None }
 
 type User =
     { id: Option<int>
       first_name: Option<string>
       last_name: Option<string>
       email: Option<string>
-      registration_status: Option<Registrationstatus>
+      registration_status: Option<RegistrationStatus>
       picture: Option<Picture> }
-    ///Creates an instance of User with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): User =
-        { id = None
-          first_name = None
-          last_name = None
-          email = None
-          registration_status = None
-          picture = None }
-
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type CurrentUserRegistrationstatus =
-    | [<CompiledName "confirmed">] Confirmed
-    | [<CompiledName "dummy">] Dummy
-    | [<CompiledName "invited">] Invited
-    member this.Format() =
-        match this with
-        | Confirmed -> "confirmed"
-        | Dummy -> "dummy"
-        | Invited -> "invited"
 
 type CurrentUserPicture =
     { small: Option<string>
       medium: Option<string>
       large: Option<string> }
-    ///Creates an instance of CurrentUserPicture with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): CurrentUserPicture =
-        { small = None
-          medium = None
-          large = None }
 
 type CurrentUser =
     { id: Option<int>
       first_name: Option<string>
       last_name: Option<string>
       email: Option<string>
-      registration_status: Option<CurrentUserRegistrationstatus>
+      registration_status: Option<RegistrationStatus>
       picture: Option<CurrentUserPicture>
       ///ISO 8601 date/time indicating the last time notifications were read
       notifications_read: Option<string>
@@ -90,7 +55,7 @@ type CurrentUser =
       locale: Option<string> }
 
 [<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type Grouptype =
+type GroupType =
     | [<CompiledName "apartment">] Apartment
     | [<CompiledName "house">] House
     | [<CompiledName "trip">] Trip
@@ -109,95 +74,37 @@ type Avatar =
       large: Option<string>
       medium: Option<string>
       small: Option<string> }
-    ///Creates an instance of Avatar with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Avatar =
-        { original = None
-          xxlarge = None
-          xlarge = None
-          large = None
-          medium = None
-          small = None }
 
-type Coverphoto =
+type CoverPhoto =
     { xxlarge: Option<string>
       xlarge: Option<string> }
-    ///Creates an instance of Coverphoto with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Coverphoto = { xxlarge = None; xlarge = None }
 
 type Group =
     { id: Option<int>
       name: Option<string>
-      group_type: Option<Grouptype>
+      group_type: Option<GroupType>
       updated_at: Option<System.DateTimeOffset>
       simplify_by_default: Option<bool>
       members: Option<list<string>>
-      original_debts: Option<list<debt>>
-      simplified_debts: Option<list<debt>>
+      original_debts: Option<list<Debt>>
+      simplified_debts: Option<list<Debt>>
       avatar: Option<Avatar>
       custom_avatar: Option<bool>
-      cover_photo: Option<Coverphoto>
+      cover_photo: Option<CoverPhoto>
       ///A link the user can send to a friend to join the group directly
       invite_link: Option<string> }
-    ///Creates an instance of Group with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Group =
-        { id = None
-          name = None
-          group_type = None
-          updated_at = None
-          simplify_by_default = None
-          members = None
-          original_debts = None
-          simplified_debts = None
-          avatar = None
-          custom_avatar = None
-          cover_photo = None
-          invite_link = None }
 
 type UnauthorizedError =
     { error: Option<string> }
-    ///Creates an instance of UnauthorizedError with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): UnauthorizedError = { error = None }
 
 type Errors =
     { ``base``: Option<list<string>> }
-    ///Creates an instance of Errors with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Errors = { ``base`` = None }
 
 type ForbiddenError =
     { errors: Option<Errors> }
-    ///Creates an instance of ForbiddenError with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): ForbiddenError = { errors = None }
-
-type NotFoundErrorErrors =
-    { ``base``: Option<list<string>> }
-    ///Creates an instance of NotFoundErrorErrors with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): NotFoundErrorErrors = { ``base`` = None }
 
 type NotFoundError =
-    { errors: Option<NotFoundErrorErrors> }
-    ///Creates an instance of NotFoundError with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): NotFoundError = { errors = None }
-
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type userRegistrationstatus =
-    | [<CompiledName "confirmed">] Confirmed
-    | [<CompiledName "dummy">] Dummy
-    | [<CompiledName "invited">] Invited
-    member this.Format() =
-        match this with
-        | Confirmed -> "confirmed"
-        | Dummy -> "dummy"
-        | Invited -> "invited"
-
-type userPicture =
-    { small: Option<string>
-      medium: Option<string>
-      large: Option<string> }
-    ///Creates an instance of userPicture with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): userPicture =
-        { small = None
-          medium = None
-          large = None }
+    { errors: Option<Errors> }
 
 type UserById_OK =
     { user : User }
@@ -207,51 +114,18 @@ type GetGetCurrentUser_OK =
 
 type unauthorized =
     { error: Option<string> }
-    ///Creates an instance of unauthorized with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): unauthorized = { error = None }
 
 type forbiddenErrors =
     { ``base``: Option<list<string>> }
-    ///Creates an instance of forbiddenErrors with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): forbiddenErrors = { ``base`` = None }
 
 type forbidden =
     { errors: forbiddenErrors }
 
 type notfoundErrors =
     { ``base``: Option<list<string>> }
-    ///Creates an instance of notfoundErrors with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): notfoundErrors = { ``base`` = None }
 
 type notfound =
     { errors: notfoundErrors }
-
-type debt =
-    { ///User ID
-      from: Option<int>
-      ///User ID
-      ``to``: Option<int>
-      amount: Option<string>
-      currency_code: Option<string> }
-    ///Creates an instance of debt with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): debt =
-        { from = None
-          ``to`` = None
-          amount = None
-          currency_code = None }
-
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type groupGrouptype =
-    | [<CompiledName "apartment">] Apartment
-    | [<CompiledName "house">] House
-    | [<CompiledName "trip">] Trip
-    | [<CompiledName "other">] Other
-    member this.Format() =
-        match this with
-        | Apartment -> "apartment"
-        | House -> "house"
-        | Trip -> "trip"
-        | Other -> "other"
 
 type groupAvatar =
     { original: Option<string>
@@ -260,104 +134,34 @@ type groupAvatar =
       large: Option<string>
       medium: Option<string>
       small: Option<string> }
-    ///Creates an instance of groupAvatar with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): groupAvatar =
-        { original = None
-          xxlarge = None
-          xlarge = None
-          large = None
-          medium = None
-          small = None }
 
 type groupCoverphoto =
     { xxlarge: Option<string>
       xlarge: Option<string> }
-    ///Creates an instance of groupCoverphoto with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): groupCoverphoto = { xxlarge = None; xlarge = None }
-
-type group =
-    { id: Option<int>
-      name: Option<string>
-      group_type: Option<groupGrouptype>
-      updated_at: Option<System.DateTimeOffset>
-      simplify_by_default: Option<bool>
-      members: Option<list<string>>
-      original_debts: Option<list<debt>>
-      simplified_debts: Option<list<debt>>
-      avatar: Option<groupAvatar>
-      custom_avatar: Option<bool>
-      cover_photo: Option<groupCoverphoto>
-      ///A link the user can send to a friend to join the group directly
-      invite_link: Option<string> }
-    ///Creates an instance of group with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): group =
-        { id = None
-          name = None
-          group_type = None
-          updated_at = None
-          simplify_by_default = None
-          members = None
-          original_debts = None
-          simplified_debts = None
-          avatar = None
-          custom_avatar = None
-          cover_photo = None
-          invite_link = None }
 
 type balance =
     { currency_code: Option<string>
       amount: Option<string> }
-    ///Creates an instance of balance with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): balance = { currency_code = None; amount = None }
-
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type friendRegistrationstatus =
-    | [<CompiledName "confirmed">] Confirmed
-    | [<CompiledName "dummy">] Dummy
-    | [<CompiledName "invited">] Invited
-    member this.Format() =
-        match this with
-        | Confirmed -> "confirmed"
-        | Dummy -> "dummy"
-        | Invited -> "invited"
 
 type friendPicture =
     { small: Option<string>
       medium: Option<string>
       large: Option<string> }
-    ///Creates an instance of friendPicture with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): friendPicture =
-        { small = None
-          medium = None
-          large = None }
 
 type Groups =
     { group_id: Option<int>
       balance: Option<list<balance>> }
-    ///Creates an instance of Groups with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Groups = { group_id = None; balance = None }
 
 type friend =
     { id: Option<int>
       first_name: Option<string>
       last_name: Option<string>
       email: Option<string>
-      registration_status: Option<friendRegistrationstatus>
+      registration_status: Option<RegistrationStatus>
       picture: Option<friendPicture>
       groups: Option<list<Groups>>
       balance: Option<list<balance>>
       updated_at: Option<System.DateTimeOffset> }
-    ///Creates an instance of friend with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): friend =
-        { id = None
-          first_name = None
-          last_name = None
-          email = None
-          registration_status = None
-          picture = None
-          groups = None
-          balance = None
-          updated_at = None }
 
 [<Fable.Core.StringEnum; RequireQualifiedAccess>]
 type Repeatinterval =
@@ -390,33 +194,15 @@ type common =
       currency_code: Option<string>
       ///A category id from `get_categories`
       category_id: Option<int> }
-    ///Creates an instance of common with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): common =
-        { cost = None
-          group_id = None
-          description = None
-          details = None
-          date = None
-          repeat_interval = None
-          currency_code = None
-          category_id = None }
 
 type commentuserPicture =
     { medium: Option<string> }
-    ///Creates an instance of commentuserPicture with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): commentuserPicture = { medium = None }
 
 type commentuser =
     { id: Option<int>
       first_name: Option<string>
       last_name: Option<string>
       picture: Option<commentuserPicture> }
-    ///Creates an instance of commentuser with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): commentuser =
-        { id = None
-          first_name = None
-          last_name = None
-          picture = None }
 
 type share =
     { user: Option<commentuser>
@@ -424,13 +210,6 @@ type share =
       paid_share: Option<string>
       owed_share: Option<string>
       net_balance: Option<string> }
-    ///Creates an instance of share with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): share =
-        { user = None
-          user_id = None
-          paid_share = None
-          owed_share = None
-          net_balance = None }
 
 [<Fable.Core.StringEnum; RequireQualifiedAccess>]
 type Commenttype =
@@ -457,15 +236,6 @@ type comment =
       relation_id: Option<int>
       created_at: Option<System.DateTimeOffset>
       deleted_at: Option<System.DateTimeOffset> }
-    ///Creates an instance of comment with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): comment =
-        { id = None
-          content = None
-          comment_type = None
-          relation_type = None
-          relation_id = None
-          created_at = None
-          deleted_at = None }
 
 [<Fable.Core.StringEnum; RequireQualifiedAccess>]
 type expenseRepeatinterval =
@@ -515,24 +285,15 @@ type Repayments =
       ///ID of the owed user
       ``to``: Option<int>
       amount: Option<string> }
-    ///Creates an instance of Repayments with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Repayments =
-        { from = None
-          ``to`` = None
-          amount = None }
 
 type Category =
     { id: Option<int>
       ///Translated to the current user's locale
       name: Option<string> }
-    ///Creates an instance of Category with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Category = { id = None; name = None }
 
 type Receipt =
     { large: Option<string>
       original: Option<string> }
-    ///Creates an instance of Receipt with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Receipt = { large = None; original = None }
 
 type expense =
     { ///A string representation of a decimal value, limited to 2 decimal places
@@ -583,37 +344,6 @@ type expense =
       receipt: Option<Receipt>
       users: Option<list<share>>
       comments: Option<list<comment>> }
-    ///Creates an instance of expense with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): expense =
-        { cost = None
-          group_id = None
-          description = None
-          details = None
-          date = None
-          repeat_interval = None
-          currency_code = None
-          category_id = None
-          id = None
-          friendship_id = None
-          expense_bundle_id = None
-          repeats = None
-          email_reminder = None
-          email_reminder_in_advance = None
-          next_repeat = None
-          comments_count = None
-          payment = None
-          transaction_confirmed = None
-          repayments = None
-          created_at = None
-          created_by = None
-          updated_at = None
-          updated_by = None
-          deleted_at = None
-          deleted_by = None
-          category = None
-          receipt = None
-          users = None
-          comments = None }
 
 [<Fable.Core.StringEnum; RequireQualifiedAccess>]
 type equalgroupsplitRepeatinterval =
@@ -647,17 +377,6 @@ type equalgroupsplit =
       ///A category id from `get_categories`
       category_id: Option<int>
       split_equally: Option<bool> }
-    ///Creates an instance of equalgroupsplit with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): equalgroupsplit =
-        { cost = None
-          group_id = None
-          description = None
-          details = None
-          date = None
-          repeat_interval = None
-          currency_code = None
-          category_id = None
-          split_equally = None }
 
 [<Fable.Core.StringEnum; RequireQualifiedAccess>]
 type bysharesRepeatinterval =
@@ -709,11 +428,6 @@ type Source =
     { ``type``: Option<string>
       id: Option<int>
       url: Option<string> }
-    ///Creates an instance of Source with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Source =
-        { ``type`` = None
-          id = None
-          url = None }
 
 [<Fable.Core.StringEnum; RequireQualifiedAccess>]
 type Imageshape =
@@ -733,64 +447,36 @@ type notification =
       image_url: Option<string>
       image_shape: Option<Imageshape>
       content: Option<string> }
-    ///Creates an instance of notification with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): notification =
-        { id = None
-          ``type`` = None
-          created_at = None
-          created_by = None
-          source = None
-          image_url = None
-          image_shape = None
-          content = None }
 
 type Slim =
     { small: Option<string>
       large: Option<string> }
-    ///Creates an instance of Slim with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Slim = { small = None; large = None }
 
 type Square =
     { large: Option<string>
       xlarge: Option<string> }
-    ///Creates an instance of Square with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Square = { large = None; xlarge = None }
 
 type Icontypes =
     { slim: Option<Slim>
       square: Option<Square> }
-    ///Creates an instance of Icontypes with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): Icontypes = { slim = None; square = None }
 
 type category =
     { id: Option<int>
       name: Option<string>
       icon: Option<string>
       icon_types: Option<Icontypes> }
-    ///Creates an instance of category with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): category =
-        { id = None
-          name = None
-          icon = None
-          icon_types = None }
 
 type parentcategoryIcontypesSlim =
     { small: Option<string>
       large: Option<string> }
-    ///Creates an instance of parentcategoryIcontypesSlim with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): parentcategoryIcontypesSlim = { small = None; large = None }
 
 type parentcategoryIcontypesSquare =
     { large: Option<string>
       xlarge: Option<string> }
-    ///Creates an instance of parentcategoryIcontypesSquare with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): parentcategoryIcontypesSquare = { large = None; xlarge = None }
 
 type parentcategoryIcontypes =
     { slim: Option<parentcategoryIcontypesSlim>
       square: Option<parentcategoryIcontypesSquare> }
-    ///Creates an instance of parentcategoryIcontypes with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): parentcategoryIcontypes = { slim = None; square = None }
 
 type parentcategory =
     { id: Option<int>
@@ -798,13 +484,6 @@ type parentcategory =
       icon: Option<string>
       icon_types: Option<parentcategoryIcontypes>
       subcategories: Option<list<category>> }
-    ///Creates an instance of parentcategory with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): parentcategory =
-        { id = None
-          name = None
-          icon = None
-          icon_types = None
-          subcategories = None }
 
 [<RequireQualifiedAccess>]
 type GetGetCurrentUser =
@@ -833,7 +512,7 @@ type PostUpdateUserById =
     ///Forbidden
     | Forbidden of payload: forbidden
 
-type GetGetGroups_OK = { groups: Option<list<group>> }
+type GetGetGroups_OK = { groups: Option<list<Group>> }
 
 [<RequireQualifiedAccess>]
 type GetGetGroups =
@@ -842,7 +521,7 @@ type GetGetGroups =
     ///Invalid API key or OAuth access token
     | Unauthorized of payload: unauthorized
 
-type GetGetGroupById_OK = { group: Option<group> }
+type GetGetGroupById_OK = { group: Option<Group> }
 
 [<RequireQualifiedAccess>]
 type GetGetGroupById =
@@ -855,7 +534,7 @@ type GetGetGroupById =
     ///Not Found
     | NotFound of payload: notfound
 
-type PostCreateGroup_OK = { group: Option<group> }
+type PostCreateGroup_OK = { group: Option<Group> }
 type PostCreateGroup_BadRequestErrors = { ``base``: Option<list<string>> }
 
 type PostCreateGroup_BadRequest =
@@ -907,10 +586,6 @@ type PostAddUserToGroup =
 type PostRemoveUserFromGroupPayload =
     { group_id: int
       user_id: int }
-    ///Creates an instance of PostRemoveUserFromGroupPayload with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (group_id: int, user_id: int): PostRemoveUserFromGroupPayload =
-        { group_id = group_id
-          user_id = user_id }
 
 type PostRemoveUserFromGroup_OK =
     { success: Option<bool>
@@ -947,11 +622,6 @@ type PostCreateFriendPayload =
     { email: string
       user_first_name: Option<string>
       user_last_name: Option<string> }
-    ///Creates an instance of PostCreateFriendPayload with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (email: string): PostCreateFriendPayload =
-        { email = email
-          user_first_name = None
-          user_last_name = None }
 
 type PostCreateFriend_OK = { friend: Option<friend> }
 
@@ -1094,8 +764,6 @@ type GetGetComments =
 type PostCreateCommentPayload =
     { expense_id: Option<int>
       content: Option<string> }
-    ///Creates an instance of PostCreateCommentPayload with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): PostCreateCommentPayload = { expense_id = None; content = None }
 
 type PostCreateComment_OK = { comment: Option<string> }
 
