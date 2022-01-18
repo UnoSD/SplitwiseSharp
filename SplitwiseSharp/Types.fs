@@ -88,19 +88,6 @@ type CurrentUser =
       default_currency: Option<string>
       ///ISO_639-1 2-letter locale code
       locale: Option<string> }
-    ///Creates an instance of CurrentUser with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): CurrentUser =
-        { id = None
-          first_name = None
-          last_name = None
-          email = None
-          registration_status = None
-          picture = None
-          notifications_read = None
-          notifications_count = None
-          notifications = None
-          default_currency = None
-          locale = None }
 
 [<Fable.Core.StringEnum; RequireQualifiedAccess>]
 type Grouptype =
@@ -212,57 +199,11 @@ type userPicture =
           medium = None
           large = None }
 
-type useruser =
-    { id: int
-      first_name: Option<string>
-      last_name: Option<string>
-      email: Option<string>
-      registration_status: Option<userRegistrationstatus>
-      picture: Option<userPicture> }
+type UserById_OK =
+    { user : User }
 
-type user =
-    { user : useruser }
-
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type currentuserRegistrationstatus =
-    | [<CompiledName "confirmed">] Confirmed
-    | [<CompiledName "dummy">] Dummy
-    | [<CompiledName "invited">] Invited
-    member this.Format() =
-        match this with
-        | Confirmed -> "confirmed"
-        | Dummy -> "dummy"
-        | Invited -> "invited"
-
-type currentuserPicture =
-    { small: Option<string>
-      medium: Option<string>
-      large: Option<string> }
-    ///Creates an instance of currentuserPicture with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): currentuserPicture =
-        { small = None
-          medium = None
-          large = None }
-
-type currentuseruser = 
-    { id: int
-      first_name: Option<string>
-      last_name: Option<string>
-      email: Option<string>
-      registration_status: Option<currentuserRegistrationstatus>
-      picture: Option<currentuserPicture>
-      ///ISO 8601 date/time indicating the last time notifications were read
-      notifications_read: Option<string>
-      ///Number of unread notifications since notifiations_read
-      notifications_count: Option<int>
-      ///User's notification preferences
-      notifications: Option<Map<string, bool>>
-      default_currency: Option<string>
-      ///ISO_639-1 2-letter locale code
-      locale: Option<string> }
-
-type currentuser =
-    { user: currentuseruser }
+type GetGetCurrentUser_OK =
+    { user: CurrentUser }
 
 type unauthorized =
     { error: Option<string> }
@@ -868,14 +809,14 @@ type parentcategory =
 [<RequireQualifiedAccess>]
 type GetGetCurrentUser =
     ///OK
-    | OK of payload: currentuser
+    | OK of payload: GetGetCurrentUser_OK
     ///Invalid API key or OAuth access token
     | Unauthorized of payload: unauthorized
 
 [<RequireQualifiedAccess>]
 type GetGetUserById =
     ///OK
-    | OK of payload: user
+    | OK of payload: UserById_OK
     ///Invalid API key or OAuth access token
     | Unauthorized of payload: unauthorized
     ///Forbidden
@@ -886,7 +827,7 @@ type GetGetUserById =
 [<RequireQualifiedAccess>]
 type PostUpdateUserById =
     ///OK
-    | OK of payload: user
+    | OK of payload: UserById_OK
     ///Invalid API key or OAuth access token
     | Unauthorized of payload: unauthorized
     ///Forbidden
@@ -955,7 +896,7 @@ type PostUndeleteGroupById =
 
 type PostAddUserToGroup_OK =
     { success: Option<bool>
-      user: Option<user>
+      user: Option<UserById_OK>
       errors: Option<Map<string, list<string>>> }
 
 [<RequireQualifiedAccess>]

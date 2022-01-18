@@ -18,6 +18,16 @@ httpClient.DefaultRequestHeaders.Authorization <-
 let client =
     SplitwiseSharpClient(httpClient)
 
+match client.GetGetCurrentUser() with
+| GetGetCurrentUser.OK           user -> printfn $"{user}"
+| GetGetCurrentUser.Unauthorized err  -> printfn $"Unauthorized: {err}"
+
+match client.GetGetUserById(userId) with
+| GetGetUserById.OK           user -> printfn $"{user}"
+| GetGetUserById.Unauthorized err  -> printfn $"Unauthorized: {err}"
+| GetGetUserById.Forbidden    err  -> printfn $"Forbidden: {err}"
+| GetGetUserById.NotFound     err  -> printfn $"NotFound: {err}"
+
 let expenseByShares =
     { cost                 = Some "10.00"
       group_id             = 0
@@ -35,6 +45,6 @@ let expenseByShares =
       users__1__owed_share = Some "0.00" } |> PostCreateExpensePayload.ByShares
 
 match client.PostCreateExpense(expenseByShares) with
-| PostCreateExpense.OK           ok  -> ok |> printfn "%A"
+| PostCreateExpense.OK           ok  -> printfn $"{ok}"
 | PostCreateExpense.Unauthorized err -> printfn $"Unauthorized: {err}"
 | PostCreateExpense.Forbidden    err -> printfn $"Forbidden: {err}"
