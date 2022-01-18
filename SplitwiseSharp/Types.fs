@@ -1,5 +1,8 @@
 namespace rec SplitwiseSharp.Types
 
+open System
+open Fable.Core
+
 type Debt =
     { ///User ID
       from: Option<int>
@@ -8,7 +11,7 @@ type Debt =
       amount: Option<string>
       currency_code: Option<string> }
 
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
+[<StringEnum; RequireQualifiedAccess>]
 type RegistrationStatus =
     | [<CompiledName "confirmed">] Confirmed
     | [<CompiledName "dummy">] Dummy
@@ -32,18 +35,13 @@ type User =
       registration_status: Option<RegistrationStatus>
       picture: Option<Picture> }
 
-type CurrentUserPicture =
-    { small: Option<string>
-      medium: Option<string>
-      large: Option<string> }
-
 type CurrentUser =
     { id: Option<int>
       first_name: Option<string>
       last_name: Option<string>
       email: Option<string>
       registration_status: Option<RegistrationStatus>
-      picture: Option<CurrentUserPicture>
+      picture: Option<Picture>
       ///ISO 8601 date/time indicating the last time notifications were read
       notifications_read: Option<string>
       ///Number of unread notifications since notifiations_read
@@ -54,7 +52,7 @@ type CurrentUser =
       ///ISO_639-1 2-letter locale code
       locale: Option<string> }
 
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
+[<StringEnum; RequireQualifiedAccess>]
 type GroupType =
     | [<CompiledName "apartment">] Apartment
     | [<CompiledName "house">] House
@@ -83,7 +81,7 @@ type Group =
     { id: Option<int>
       name: Option<string>
       group_type: Option<GroupType>
-      updated_at: Option<System.DateTimeOffset>
+      updated_at: Option<DateTimeOffset>
       simplify_by_default: Option<bool>
       members: Option<list<string>>
       original_debts: Option<list<Debt>>
@@ -94,23 +92,8 @@ type Group =
       ///A link the user can send to a friend to join the group directly
       invite_link: Option<string> }
 
-type UnauthorizedError =
-    { error: Option<string> }
-
 type Errors =
     { ``base``: Option<list<string>> }
-
-type ForbiddenError =
-    { errors: Option<Errors> }
-
-type NotFoundError =
-    { errors: Option<Errors> }
-
-type UserById_OK =
-    { user : User }
-
-type GetGetCurrentUser_OK =
-    { user: CurrentUser }
 
 type unauthorized =
     { error: Option<string> }
@@ -121,50 +104,33 @@ type forbiddenErrors =
 type forbidden =
     { errors: forbiddenErrors }
 
-type notfoundErrors =
+type notFoundErrors =
     { ``base``: Option<list<string>> }
 
-type notfound =
-    { errors: notfoundErrors }
+type notFound =
+    { errors: notFoundErrors }
 
-type groupAvatar =
-    { original: Option<string>
-      xxlarge: Option<string>
-      xlarge: Option<string>
-      large: Option<string>
-      medium: Option<string>
-      small: Option<string> }
-
-type groupCoverphoto =
-    { xxlarge: Option<string>
-      xlarge: Option<string> }
-
-type balance =
+type Balance =
     { currency_code: Option<string>
       amount: Option<string> }
 
-type friendPicture =
-    { small: Option<string>
-      medium: Option<string>
-      large: Option<string> }
-
 type Groups =
     { group_id: Option<int>
-      balance: Option<list<balance>> }
+      balance: Option<list<Balance>> }
 
-type friend =
+type Friend =
     { id: Option<int>
       first_name: Option<string>
       last_name: Option<string>
       email: Option<string>
       registration_status: Option<RegistrationStatus>
-      picture: Option<friendPicture>
+      picture: Option<Picture>
       groups: Option<list<Groups>>
-      balance: Option<list<balance>>
-      updated_at: Option<System.DateTimeOffset> }
+      balance: Option<list<Balance>>
+      updated_at: Option<DateTimeOffset> }
 
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type Repeatinterval =
+[<StringEnum; RequireQualifiedAccess>]
+type RepeatInterval =
     | [<CompiledName "never">] Never
     | [<CompiledName "weekly">] Weekly
     | [<CompiledName "fortnightly">] Fortnightly
@@ -178,41 +144,24 @@ type Repeatinterval =
         | Monthly -> "monthly"
         | Yearly -> "yearly"
 
-type common =
-    { ///A string representation of a decimal value, limited to 2 decimal places
-      cost: Option<string>
-      ///The group to put this expense in, or `0` to create an expense outside of a group.
-      group_id: Option<int>
-      ///A short description of the expense
-      description: Option<string>
-      ///Also known as "notes."
-      details: Option<string>
-      ///The date and time the expense took place. May differ from `created_at`
-      date: Option<System.DateTimeOffset>
-      repeat_interval: Option<Repeatinterval>
-      ///A currency code. Must be in the list from `get_currencies`
-      currency_code: Option<string>
-      ///A category id from `get_categories`
-      category_id: Option<int> }
-
-type commentuserPicture =
+type CommentUserPicture =
     { medium: Option<string> }
 
-type commentuser =
+type CommentUser =
     { id: Option<int>
       first_name: Option<string>
       last_name: Option<string>
-      picture: Option<commentuserPicture> }
+      picture: Option<CommentUserPicture> }
 
-type share =
-    { user: Option<commentuser>
+type Share =
+    { user: Option<CommentUser>
       user_id: Option<int>
       paid_share: Option<string>
       owed_share: Option<string>
       net_balance: Option<string> }
 
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type Commenttype =
+[<StringEnum; RequireQualifiedAccess>]
+type CommentType =
     | [<CompiledName "System">] System
     | [<CompiledName "User">] User
     member this.Format() =
@@ -220,54 +169,24 @@ type Commenttype =
         | System -> "System"
         | User -> "User"
 
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type Relationtype =
+[<StringEnum; RequireQualifiedAccess>]
+type RelationType =
     | [<CompiledName "ExpenseComment">] ExpenseComment
     member this.Format() =
         match this with
         | ExpenseComment -> "ExpenseComment"
 
-type comment =
+type Comment =
     { id: Option<int>
       content: Option<string>
-      comment_type: Option<Commenttype>
-      relation_type: Option<Relationtype>
+      comment_type: Option<CommentType>
+      relation_type: Option<RelationType>
       ///ID of the subject of the comment
       relation_id: Option<int>
-      created_at: Option<System.DateTimeOffset>
-      deleted_at: Option<System.DateTimeOffset> }
+      created_at: Option<DateTimeOffset>
+      deleted_at: Option<DateTimeOffset> }
 
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type expenseRepeatinterval =
-    | [<CompiledName "never">] Never
-    | [<CompiledName "weekly">] Weekly
-    | [<CompiledName "fortnightly">] Fortnightly
-    | [<CompiledName "monthly">] Monthly
-    | [<CompiledName "yearly">] Yearly
-    member this.Format() =
-        match this with
-        | Never -> "never"
-        | Weekly -> "weekly"
-        | Fortnightly -> "fortnightly"
-        | Monthly -> "monthly"
-        | Yearly -> "yearly"
-
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type RepeatintervalFromexpense =
-    | [<CompiledName "never">] Never
-    | [<CompiledName "weekly">] Weekly
-    | [<CompiledName "fortnightly">] Fortnightly
-    | [<CompiledName "monthly">] Monthly
-    | [<CompiledName "yearly">] Yearly
-    member this.Format() =
-        match this with
-        | Never -> "never"
-        | Weekly -> "weekly"
-        | Fortnightly -> "fortnightly"
-        | Monthly -> "monthly"
-        | Yearly -> "yearly"
-
-type Emailreminderinadvance =
+type EmailReminderInAdvance =
     | ``Emailreminderinadvance-1`` = -1
     | Emailreminderinadvance0 = 0
     | Emailreminderinadvance1 = 1
@@ -286,7 +205,7 @@ type Repayments =
       ``to``: Option<int>
       amount: Option<string> }
 
-type Category =
+type ExpenseCategory =
     { id: Option<int>
       ///Translated to the current user's locale
       name: Option<string> }
@@ -295,7 +214,7 @@ type Receipt =
     { large: Option<string>
       original: Option<string> }
 
-type expense =
+type Expense =
     { ///A string representation of a decimal value, limited to 2 decimal places
       cost: Option<string>
       ///The group to put this expense in, or `0` to create an expense outside of a group.
@@ -305,8 +224,8 @@ type expense =
       ///Also known as "notes."
       details: Option<string>
       ///The date and time the expense took place. May differ from `created_at`
-      date: Option<System.DateTimeOffset>
-      repeat_interval: Option<expenseRepeatinterval>
+      date: Option<DateTimeOffset>
+      repeat_interval: Option<RepeatInterval>
       ///A currency code. Must be in the list from `get_currencies`
       currency_code: Option<string>
       ///A category id from `get_categories`
@@ -322,7 +241,7 @@ type expense =
       email_reminder: Option<bool>
       ///Number of days in advance to remind involved users about the next occurrence of a new expense.
       ///Only applicable if the expense recurs.
-      email_reminder_in_advance: Option<Emailreminderinadvance>
+      email_reminder_in_advance: Option<EmailReminderInAdvance>
       ///The date of the next occurrence of a recurring expense. Only applicable if the expense recurs.
       next_repeat: Option<string>
       comments_count: Option<int>
@@ -332,35 +251,20 @@ type expense =
       transaction_confirmed: Option<bool>
       repayments: Option<list<Repayments>>
       ///The date and time the expense was created on Splitwise
-      created_at: Option<System.DateTimeOffset>
+      created_at: Option<DateTimeOffset>
       created_by: Option<User>
       ///The last time the expense was updated.
-      updated_at: Option<System.DateTimeOffset>
+      updated_at: Option<DateTimeOffset>
       updated_by: Option<User>
       ///If the expense was deleted, when it was deleted.
-      deleted_at: Option<System.DateTimeOffset>
+      deleted_at: Option<DateTimeOffset>
       deleted_by: Option<User>
-      category: Option<Category>
+      category: Option<ExpenseCategory>
       receipt: Option<Receipt>
-      users: Option<list<share>>
-      comments: Option<list<comment>> }
+      users: Option<list<Share>>
+      comments: Option<list<Comment>> }
 
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type equalgroupsplitRepeatinterval =
-    | [<CompiledName "never">] Never
-    | [<CompiledName "weekly">] Weekly
-    | [<CompiledName "fortnightly">] Fortnightly
-    | [<CompiledName "monthly">] Monthly
-    | [<CompiledName "yearly">] Yearly
-    member this.Format() =
-        match this with
-        | Never -> "never"
-        | Weekly -> "weekly"
-        | Fortnightly -> "fortnightly"
-        | Monthly -> "monthly"
-        | Yearly -> "yearly"
-
-type equalgroupsplit =
+type EqualGroupSplitExpense =
     { ///A string representation of a decimal value, limited to 2 decimal places
       cost: Option<string>
       ///The group to put this expense in, or `0` to create an expense outside of a group.
@@ -370,30 +274,15 @@ type equalgroupsplit =
       ///Also known as "notes."
       details: Option<string>
       ///The date and time the expense took place. May differ from `created_at`
-      date: Option<System.DateTimeOffset>
-      repeat_interval: Option<equalgroupsplitRepeatinterval>
+      date: Option<DateTimeOffset>
+      repeat_interval: Option<RepeatInterval>
       ///A currency code. Must be in the list from `get_currencies`
       currency_code: Option<string>
       ///A category id from `get_categories`
       category_id: Option<int>
       split_equally: Option<bool> }
 
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type bysharesRepeatinterval =
-    | [<CompiledName "never">] Never
-    | [<CompiledName "weekly">] Weekly
-    | [<CompiledName "fortnightly">] Fortnightly
-    | [<CompiledName "monthly">] Monthly
-    | [<CompiledName "yearly">] Yearly
-    member this.Format() =
-        match this with
-        | Never -> "never"
-        | Weekly -> "weekly"
-        | Fortnightly -> "fortnightly"
-        | Monthly -> "monthly"
-        | Yearly -> "yearly"
-
-type byshares =
+type BySharesExpense =
     { ///A string representation of a decimal value, limited to 2 decimal places
       cost: Option<string>
       ///The group to put this expense in, or `0` to create an expense outside of a group.
@@ -403,8 +292,8 @@ type byshares =
       ///Also known as "notes."
       details: Option<string>
       ///The date and time the expense took place. May differ from `created_at`
-      date: Option<System.DateTimeOffset>
-      repeat_interval: Option<bysharesRepeatinterval>
+      date: Option<DateTimeOffset>
+      repeat_interval: Option<RepeatInterval>
       ///A currency code. Must be in the list from `get_currencies`
       currency_code: Option<string>
       ///A category id from `get_categories`
@@ -421,16 +310,16 @@ type byshares =
       users__1__owed_share: Option<string> }
 
 type PostCreateExpensePayload =
-    | EqualGroupSplit of equalgroupsplit
-    | ByShares of byshares
+    | EqualGroupSplit of EqualGroupSplitExpense
+    | ByShares of BySharesExpense
 
 type Source =
     { ``type``: Option<string>
       id: Option<int>
       url: Option<string> }
 
-[<Fable.Core.StringEnum; RequireQualifiedAccess>]
-type Imageshape =
+[<StringEnum; RequireQualifiedAccess>]
+type ImageShape =
     | [<CompiledName "square">] Square
     | [<CompiledName "circle">] Circle
     member this.Format() =
@@ -438,14 +327,14 @@ type Imageshape =
         | Square -> "square"
         | Circle -> "circle"
 
-type notification =
+type Notification =
     { id: Option<int>
       ``type``: Option<int>
-      created_at: Option<System.DateTimeOffset>
+      created_at: Option<DateTimeOffset>
       created_by: Option<int>
       source: Option<Source>
       image_url: Option<string>
-      image_shape: Option<Imageshape>
+      image_shape: Option<ImageShape>
       content: Option<string> }
 
 type Slim =
@@ -456,94 +345,87 @@ type Square =
     { large: Option<string>
       xlarge: Option<string> }
 
-type Icontypes =
+type IconTypes =
     { slim: Option<Slim>
       square: Option<Square> }
 
-type category =
+type Category =
     { id: Option<int>
       name: Option<string>
       icon: Option<string>
-      icon_types: Option<Icontypes> }
+      icon_types: Option<IconTypes> }
 
-type parentcategoryIcontypesSlim =
+type ParentVategoryIconTypesSlim =
     { small: Option<string>
       large: Option<string> }
 
-type parentcategoryIcontypesSquare =
+type ParentCategoryIconTypesSquare =
     { large: Option<string>
       xlarge: Option<string> }
 
-type parentcategoryIcontypes =
-    { slim: Option<parentcategoryIcontypesSlim>
-      square: Option<parentcategoryIcontypesSquare> }
+type ParentCategoryIconTypes =
+    { slim: Option<ParentVategoryIconTypesSlim>
+      square: Option<ParentCategoryIconTypesSquare> }
 
-type parentcategory =
+type ParentCategory =
     { id: Option<int>
       name: Option<string>
       icon: Option<string>
-      icon_types: Option<parentcategoryIcontypes>
-      subcategories: Option<list<category>> }
+      icon_types: Option<ParentCategoryIconTypes>
+      subcategories: Option<list<Category>> }
 
 [<RequireQualifiedAccess>]
 type GetGetCurrentUser =
     ///OK
-    | OK of payload: GetGetCurrentUser_OK
+    | OK of payload: {| user: CurrentUser |}
     ///Invalid API key or OAuth access token
     | Unauthorized of payload: unauthorized
 
 [<RequireQualifiedAccess>]
 type GetGetUserById =
     ///OK
-    | OK of payload: UserById_OK
+    | OK of payload: {| user : User |}
     ///Invalid API key or OAuth access token
     | Unauthorized of payload: unauthorized
     ///Forbidden
     | Forbidden of payload: forbidden
     ///Not Found
-    | NotFound of payload: notfound
+    | NotFound of payload: notFound
 
 [<RequireQualifiedAccess>]
 type PostUpdateUserById =
     ///OK
-    | OK of payload: UserById_OK
+    | OK of payload: {| user : User |}
     ///Invalid API key or OAuth access token
     | Unauthorized of payload: unauthorized
     ///Forbidden
     | Forbidden of payload: forbidden
 
-type GetGetGroups_OK = { groups: Option<list<Group>> }
-
 [<RequireQualifiedAccess>]
 type GetGetGroups =
     ///OK
-    | OK of payload: GetGetGroups_OK
+    | OK of payload: {| groups: Option<list<Group>> |}
     ///Invalid API key or OAuth access token
     | Unauthorized of payload: unauthorized
-
-type GetGetGroupById_OK = { group: Option<Group> }
 
 [<RequireQualifiedAccess>]
 type GetGetGroupById =
     ///OK
-    | OK of payload: GetGetGroupById_OK
+    | OK of payload: {| group: Option<Group> |}
     ///Invalid API key or OAuth access token
     | Unauthorized of payload: unauthorized
     ///Forbidden
     | Forbidden of payload: forbidden
     ///Not Found
-    | NotFound of payload: notfound
-
-type PostCreateGroup_OK = { group: Option<Group> }
-type PostCreateGroup_BadRequestErrors = { ``base``: Option<list<string>> }
+    | NotFound of payload: notFound
 
 type PostCreateGroup_BadRequest =
-    { errors: Option<PostCreateGroup_BadRequestErrors> }
+    { errors: Option<{| ``base``: Option<list<string>> |}> }
 
 [<RequireQualifiedAccess>]
 type PostCreateGroup =
     ///OK
-    | OK of payload: PostCreateGroup_OK
+    | OK of payload: {| group: Option<Group> |}
     ///Bad Request
     | BadRequest of payload: PostCreateGroup_BadRequest
 
@@ -558,7 +440,7 @@ type PostDeleteGroupById =
     ///Forbidden
     | Forbidden of payload: forbidden
     ///Not Found
-    | NotFound of payload: notfound
+    | NotFound of payload: notFound
 
 type PostUndeleteGroupById_OK =
     { success: Option<bool>
@@ -575,7 +457,7 @@ type PostUndeleteGroupById =
 
 type PostAddUserToGroup_OK =
     { success: Option<bool>
-      user: Option<UserById_OK>
+      user: Option<{| user : User |}>
       errors: Option<Map<string, list<string>>> }
 
 [<RequireQualifiedAccess>]
@@ -605,7 +487,7 @@ type GetGetFriends =
     ///Invalid API key or OAuth access token
     | Unauthorized of payload: unauthorized
 
-type GetGetFriendById_OK = { friend: Option<friend> }
+type GetGetFriendById_OK = { friend: Option<Friend> }
 
 [<RequireQualifiedAccess>]
 type GetGetFriendById =
@@ -616,14 +498,14 @@ type GetGetFriendById =
     ///Forbidden
     | Forbidden of payload: forbidden
     ///Not Found
-    | NotFound of payload: notfound
+    | NotFound of payload: notFound
 
 type PostCreateFriendPayload =
     { email: string
       user_first_name: Option<string>
       user_last_name: Option<string> }
 
-type PostCreateFriend_OK = { friend: Option<friend> }
+type PostCreateFriend_OK = { friend: Option<Friend> }
 
 [<RequireQualifiedAccess>]
 type PostCreateFriend =
@@ -662,7 +544,7 @@ type PostDeleteFriendById =
     ///Forbidden
     | Forbidden of payload: forbidden
     ///Not Found
-    | NotFound of payload: notfound
+    | NotFound of payload: notFound
 
 type Currencies =
     { currency_code: Option<string>
@@ -676,7 +558,7 @@ type GetGetCurrencies =
     ///OK
     | OK of payload: GetGetCurrencies_OK
 
-type GetGetExpenseById_OK = { expense: Option<expense> }
+type GetGetExpenseById_OK = { expense: Option<Expense> }
 
 [<RequireQualifiedAccess>]
 type GetGetExpenseById =
@@ -687,9 +569,9 @@ type GetGetExpenseById =
     ///Forbidden
     | Forbidden of payload: forbidden
     ///Not Found
-    | NotFound of payload: notfound
+    | NotFound of payload: notFound
 
-type GetGetExpenses_OK = { expenses: Option<list<expense>> }
+type GetGetExpenses_OK = { expenses: Option<list<Expense>> }
 
 [<RequireQualifiedAccess>]
 type GetGetExpenses =
@@ -700,10 +582,10 @@ type GetGetExpenses =
     ///Forbidden
     | Forbidden of payload: forbidden
     ///Not Found
-    | NotFound of payload: notfound
+    | NotFound of payload: notFound
 
 type PostCreateExpense_OK =
-    { expenses: list<expense>
+    { expenses: list<Expense>
       errors: Errors }
 
 [<RequireQualifiedAccess>]
@@ -716,7 +598,7 @@ type PostCreateExpense =
     | Forbidden of payload: forbidden
 
 type PostUpdateExpenseById_OK =
-    { expenses: Option<list<expense>> }
+    { expenses: Option<list<Expense>> }
 
 [<RequireQualifiedAccess>]
 type PostUpdateExpenseById =
@@ -748,7 +630,7 @@ type PostUndeleteExpenseById =
     ///Forbidden
     | Forbidden of payload: forbidden
 
-type GetGetComments_OK = { comments: Option<list<comment>> }
+type GetGetComments_OK = { comments: Option<list<Comment>> }
 
 [<RequireQualifiedAccess>]
 type GetGetComments =
@@ -759,7 +641,7 @@ type GetGetComments =
     ///Forbidden
     | Forbidden of payload: forbidden
     ///Not Found
-    | NotFound of payload: notfound
+    | NotFound of payload: notFound
 
 type PostCreateCommentPayload =
     { expense_id: Option<int>
@@ -776,7 +658,7 @@ type PostCreateComment =
     ///Forbidden
     | Forbidden of payload: forbidden
     ///Not Found
-    | NotFound of payload: notfound
+    | NotFound of payload: notFound
 
 type PostDeleteComment_OK = { comment: Option<string> }
 
@@ -789,10 +671,10 @@ type PostDeleteComment =
     ///Forbidden
     | Forbidden of payload: forbidden
     ///Not Found
-    | NotFound of payload: notfound
+    | NotFound of payload: notFound
 
 type GetGetNotifications_OK =
-    { notifications: Option<list<notification>> }
+    { notifications: Option<list<Notification>> }
 
 [<RequireQualifiedAccess>]
 type GetGetNotifications =
@@ -802,7 +684,7 @@ type GetGetNotifications =
     | Unauthorized of payload: unauthorized
 
 type GetGetCategories_OK =
-    { categories: Option<list<parentcategory>> }
+    { categories: Option<list<ParentCategory>> }
 
 [<RequireQualifiedAccess>]
 type GetGetCategories =
@@ -810,7 +692,7 @@ type GetGetCategories =
     | OK of payload: GetGetCategories_OK
 
 type PostParseSentence_OK =
-    { expense: Option<expense>
+    { expense: Option<Expense>
       valid: Option<bool>
       confidence: Option<float>
       error: Option<string> }
