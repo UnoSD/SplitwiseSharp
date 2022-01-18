@@ -23,11 +23,11 @@ type SplitwiseSharpClient(httpClient: HttpClient) =
     ///<summary>
     ///Get information about another user
     ///</summary>
-    member this.GetGetUserById() =
+    member this.GetGetUserById(id) =
         let requestParts = []
 
         let status, content =
-            OpenApiHttp.get httpClient "/get_user/{id}" requestParts
+            OpenApiHttp.get httpClient $"/get_user/%i{id}" requestParts
 
         if status = HttpStatusCode.OK then
             GetGetUserById.OK(Serializer.deserialize content)

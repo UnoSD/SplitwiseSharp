@@ -212,21 +212,16 @@ type userPicture =
           medium = None
           large = None }
 
-type user =
-    { id: Option<int>
+type useruser =
+    { id: int
       first_name: Option<string>
       last_name: Option<string>
       email: Option<string>
       registration_status: Option<userRegistrationstatus>
       picture: Option<userPicture> }
-    ///Creates an instance of user with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): user =
-        { id = None
-          first_name = None
-          last_name = None
-          email = None
-          registration_status = None
-          picture = None }
+
+type user =
+    { user : useruser }
 
 [<Fable.Core.StringEnum; RequireQualifiedAccess>]
 type currentuserRegistrationstatus =
@@ -280,9 +275,7 @@ type forbiddenErrors =
     static member Create (): forbiddenErrors = { ``base`` = None }
 
 type forbidden =
-    { errors: Option<forbiddenErrors> }
-    ///Creates an instance of forbidden with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): forbidden = { errors = None }
+    { errors: forbiddenErrors }
 
 type notfoundErrors =
     { ``base``: Option<list<string>> }
@@ -290,9 +283,7 @@ type notfoundErrors =
     static member Create (): notfoundErrors = { ``base`` = None }
 
 type notfound =
-    { errors: Option<notfoundErrors> }
-    ///Creates an instance of notfound with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): notfound = { errors = None }
+    { errors: notfoundErrors }
 
 type debt =
     { ///User ID

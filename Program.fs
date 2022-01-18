@@ -48,7 +48,6 @@ let expense =
 //|> post "create_expense"
 //|> printfn "%A"
 
-open System
 open SplitwiseSharp
 open System.Net.Http
 open SplitwiseSharp.Types
@@ -63,6 +62,8 @@ httpClient.DefaultRequestHeaders.Authorization <-
 let client =
     SplitwiseSharpClient(httpClient)
 
-match client.GetGetCurrentUser() with
-| GetGetCurrentUser.OK currentuser   -> currentuser |> printfn "%A"
-| GetGetCurrentUser.Unauthorized err -> printfn $"Bad request: {err}"
+match client.GetGetUserById(3871342) with
+| GetGetUserById.OK currentuser   -> currentuser |> printfn "%A"
+| GetGetUserById.Unauthorized err -> printfn $"Bad request: {err}"
+| GetGetUserById.Forbidden x      -> match x.errors.``base`` with Some x -> printfn $"Forbidden %A{x}" | _ -> ()
+| GetGetUserById.NotFound  x      -> match x.errors.``base`` with Some x -> printfn $"Not found %A{x}" | _ -> ()
