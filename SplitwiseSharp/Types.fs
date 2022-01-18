@@ -631,13 +631,13 @@ type expense =
       repayments: Option<list<Repayments>>
       ///The date and time the expense was created on Splitwise
       created_at: Option<System.DateTimeOffset>
-      created_by: Option<string>
+      created_by: Option<User>
       ///The last time the expense was updated.
       updated_at: Option<System.DateTimeOffset>
-      updated_by: Option<string>
+      updated_by: Option<User>
       ///If the expense was deleted, when it was deleted.
       deleted_at: Option<System.DateTimeOffset>
-      deleted_by: Option<string>
+      deleted_by: Option<User>
       category: Option<Category>
       receipt: Option<Receipt>
       users: Option<list<share>>
@@ -737,7 +737,7 @@ type byshares =
     { ///A string representation of a decimal value, limited to 2 decimal places
       cost: Option<string>
       ///The group to put this expense in, or `0` to create an expense outside of a group.
-      group_id: Option<int>
+      group_id: int
       ///A short description of the expense
       description: Option<string>
       ///Also known as "notes."
@@ -754,31 +754,15 @@ type byshares =
       users__0__paid_share: Option<string>
       ///Decimal amount as a string with 2 decimal places. The amount this user owes for the expense
       users__0__owed_share: Option<string>
-      users__1__first_name: Option<string>
-      users__1__last_name: Option<string>
-      users__1__email: Option<string>
+      users__1__user_id: Option<int>
       ///Decimal amount as a string with 2 decimal places. The amount this user paid for the expense
       users__1__paid_share: Option<string>
       ///Decimal amount as a string with 2 decimal places. The amount this user owes for the expense
       users__1__owed_share: Option<string> }
-    ///Creates an instance of byshares with all optional fields initialized to None. The required fields are parameters of this function
-    static member Create (): byshares =
-        { cost = None
-          group_id = None
-          description = None
-          details = None
-          date = None
-          repeat_interval = None
-          currency_code = None
-          category_id = None
-          users__0__user_id = None
-          users__0__paid_share = None
-          users__0__owed_share = None
-          users__1__first_name = None
-          users__1__last_name = None
-          users__1__email = None
-          users__1__paid_share = None
-          users__1__owed_share = None }
+
+type PostCreateExpensePayload =
+    | EqualGroupSplit of equalgroupsplit
+    | ByShares of byshares
 
 type Source =
     { ``type``: Option<string>
@@ -1108,7 +1092,8 @@ type GetGetExpenses =
     | NotFound of payload: notfound
 
 type PostCreateExpense_OK =
-    { expenses: Option<list<expense>> }
+    { expenses: list<expense>
+      errors: Errors }
 
 [<RequireQualifiedAccess>]
 type PostCreateExpense =

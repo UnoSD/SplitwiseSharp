@@ -41,11 +41,11 @@ type SplitwiseSharpClient(httpClient: HttpClient) =
     ///<summary>
     ///Update a user
     ///</summary>
-    member this.PostUpdateUserById(body: string) =
+    member this.PostUpdateUserById(id, body: string) =
         let requestParts = [ RequestPart.jsonContent body ]
 
         let status, content =
-            OpenApiHttp.post httpClient "/update_user/{id}" requestParts
+            OpenApiHttp.post httpClient $"/update_user/%i{id}" requestParts
 
         if status = HttpStatusCode.OK then
             PostUpdateUserById.OK(Serializer.deserialize content)
@@ -337,9 +337,12 @@ type SplitwiseSharpClient(httpClient: HttpClient) =
     ///- `user_id`
     ///**Note**: 200 OK does not indicate a successful response. The operation was successful only if `errors` is empty.
     ///</summary>
-    member this.PostCreateExpense() =
-        let requestParts = []
-
+    member this.PostCreateExpense(body : PostCreateExpensePayload) =
+        let requestParts = 
+            match body with
+            | ByShares byShares               -> [ RequestPart.jsonContent byShares ]
+            | EqualGroupSplit equalGroupSplit -> [ RequestPart.jsonContent equalGroupSplit ]
+        
         let status, content =
             OpenApiHttp.post httpClient "/create_expense" requestParts
 
