@@ -10,11 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="FSharp.Data" Version="4.2.7" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="Hawaii\Hawaii.fsproj" />
+      <ProjectReference Include="..\SplitwiseSharp\SplitwiseSharp.fsproj" />
     </ItemGroup>
 
 </Project>

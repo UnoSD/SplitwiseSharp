@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SplitwiseSharp", "SplitwiseSharp.fsproj", "{58DDA9A6-726F-4861-BEDF-6706FFEF306A}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SplitwiseSharp", "SplitwiseSharp\SplitwiseSharp.fsproj", "{16F8A3B8-A247-4214-80F2-311BE0D15664}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Hawaii", "Hawaii\Hawaii.fsproj", "{25B6E237-7256-45BA-A8B8-0DA06597DF3A}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SplitwiseSharp.Test", "SplitwiseSharp.Test\SplitwiseSharp.Test.fsproj", "{F32B191A-90A6-4B2C-A39A-B52C8C21FF3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,13 +10,13 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{58DDA9A6-726F-4861-BEDF-6706FFEF306A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58DDA9A6-726F-4861-BEDF-6706FFEF306A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58DDA9A6-726F-4861-BEDF-6706FFEF306A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58DDA9A6-726F-4861-BEDF-6706FFEF306A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25B6E237-7256-45BA-A8B8-0DA06597DF3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25B6E237-7256-45BA-A8B8-0DA06597DF3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25B6E237-7256-45BA-A8B8-0DA06597DF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25B6E237-7256-45BA-A8B8-0DA06597DF3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16F8A3B8-A247-4214-80F2-311BE0D15664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16F8A3B8-A247-4214-80F2-311BE0D15664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16F8A3B8-A247-4214-80F2-311BE0D15664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16F8A3B8-A247-4214-80F2-311BE0D15664}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F32B191A-90A6-4B2C-A39A-B52C8C21FF3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F32B191A-90A6-4B2C-A39A-B52C8C21FF3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F32B191A-90A6-4B2C-A39A-B52C8C21FF3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F32B191A-90A6-4B2C-A39A-B52C8C21FF3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
