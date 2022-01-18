@@ -469,20 +469,20 @@ type SplitwiseSharpClient(httpClient: HttpClient) =
     ///| ---- | ------- |
     ///| 0    | Expense added |
     ///| 1    | Expense updated |
-    ///| 2	   | Expense deleted |
-    ///| 3	   | Comment added |
-    ///| 4	   | Added to group |
-    ///| 5	   | Removed from group |
-    ///| 6	   | Group deleted |
-    ///| 7	   | Group settings changed |
-    ///| 8	   | Added as friend |
-    ///| 9	   | Removed as friend |
-    ///| 10	 | News (a URL should be included) |
-    ///| 11	 | Debt simplification |
-    ///| 12	 | Group undeleted |
-    ///| 13	 | Expense undeleted |
-    ///| 14	 | Group currency conversion |
-    ///| 15	 | Friend currency conversion |
+    ///| 2	  | Expense deleted |
+    ///| 3	  | Comment added |
+    ///| 4	  | Added to group |
+    ///| 5	  | Removed from group |
+    ///| 6	  | Group deleted |
+    ///| 7	  | Group settings changed |
+    ///| 8	  | Added as friend |
+    ///| 9	  | Removed as friend |
+    ///| 10	  | News (a URL should be included) |
+    ///| 11	  | Debt simplification |
+    ///| 12	  | Group undeleted |
+    ///| 13	  | Expense undeleted |
+    ///| 14	  | Group currency conversion |
+    ///| 15	  | Friend currency conversion |
     ///**Note**: While all parameters are optional, the server sets arbitrary (but large) limits
     ///on the number of notifications returned if you set a very old `updated_after` value or `limit` of `0` for a
     ///user with many notifications.
